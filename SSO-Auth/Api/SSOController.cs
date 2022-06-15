@@ -53,7 +53,7 @@ public class SSOController : ControllerBase
     /// <param name="state">The current request state.</param>
     /// <returns>A webpage that will complete the client-side flow.</returns>
     // Actually a GET: https://github.com/IdentityModel/IdentityModel.OidcClient/issues/325
-    [HttpGet("OID/r/{provider}")]
+    [HttpGet("oid/r/{provider}")]
     public ActionResult OidPost(
         [FromRoute] string provider,
         [FromQuery] string state) // Although this is a GET function, this function is called `Post` for consistency with SAML
@@ -75,7 +75,7 @@ public class SSOController : ControllerBase
                 Authority = config.OidEndpoint,
                 ClientId = config.OidClientId,
                 ClientSecret = config.OidSecret,
-                RedirectUri = GetRequestBase() + "/sso/OID/r/" + provider,
+                RedirectUri = GetRequestBase() + "/sso/oid/r/" + provider,
                 Scope = string.Join(" ", config.OidScopes.Prepend("openid profile")),
             };
             options.Policy.Discovery.ValidateEndpoints = false; // For Google and other providers with different endpoints
@@ -221,7 +221,7 @@ public class SSOController : ControllerBase
     /// </summary>
     /// <param name="provider">The name of the provider.</param>
     /// <returns>An asynchronous result for the authentication.</returns>
-    [HttpGet("OID/p/{provider}")]
+    [HttpGet("oid/p/{provider}")]
     public async Task<ActionResult> OidChallenge(string provider)
     {
         Invalidate();
@@ -242,7 +242,7 @@ public class SSOController : ControllerBase
                 Authority = config.OidEndpoint,
                 ClientId = config.OidClientId,
                 ClientSecret = config.OidSecret,
-                RedirectUri = GetRequestBase() + "/sso/OID/r/" + provider,
+                RedirectUri = GetRequestBase() + "/sso/oid/r/" + provider,
                 Scope = string.Join(" ", config.OidScopes.Prepend("openid profile")),
             };
             options.Policy.Discovery.ValidateEndpoints = false; // For Google and other providers with different endpoints
